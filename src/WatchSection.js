@@ -77,6 +77,9 @@ export default class WatchSection extends React.Component {
     if (serviceName === 'NBC') {
       return 'https://res.cloudinary.com/dyoiajatd/image/upload/v1640834380/nbc_zemqc5.png';
     }
+    if (serviceName === 'Other') {
+      return 'https://res.cloudinary.com/dyoiajatd/image/upload/v1767328311/globe.jpg';
+    }
     return null;
   }
 

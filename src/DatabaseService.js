@@ -43,12 +43,20 @@ class DatabaseService {
           show.tags = tags ? tags.split(',').map(val => val.trim()) : [];
           show.streamingUrls = streaming ? streaming.split(',').map(val => val.trim()) : [];
           show.streaming = show.streamingUrls.map(url => this.mapStreamingUrlToService(url));
-          show.isFeatured = (featured === 'Yes');
+          show.isFeatured = this.isFeatured(featured);
           if (show.isFeatured) {
             featuredShowList.push(show);
           }
           else {
             showList.push(show);
+          }
+          // This conditional was added in order to remove the status field from unfinished shows, so that the burden
+          // of keeping the DB updated is lessened
+          if (!show.status.toLowerCase().includes("concluded")
+              && !show.status.toLowerCase().includes("cancelled")
+              && !show.status.toLowerCase().includes("miniseries")
+              && !show.status.toLowerCase().includes("special")) {
+            show.status = null;
           }
           showByName[name.toLowerCase()] = show;
         }
@@ -133,9 +141,10 @@ class DatabaseService {
 
     if (status === "Concluded") {
       filteredData = filteredData.filter(show =>
-        show.status.toLowerCase().includes("concluded")
+        show.status != null && (
+          show.status.toLowerCase().includes("concluded")
           || show.status.toLowerCase().includes("cancelled")
-          || show.status.toLowerCase().includes("miniseries")
+          || show.status.toLowerCase().includes("miniseries"))
       );
     }
 
@@ -228,7 +237,32 @@ class DatabaseService {
     if (url.includes('nbc.com')) {
       return 'NBC';
     }
+    if (url.startsWith('http')) {
+      return 'Other';
+    }
     return url;  // if we don't recognize it, it's probably a name and not a url
+  }
+
+  isFeatured(input) {
+    if (input === 'Yes') {
+      return true;
+    }
+    var parsedDate = Date.parse(input);
+    if (!parsedDate) {
+     return false;
+    }
+    var asDate = new Date(parsedDate);
+    var today = new Date();
+    if (asDate > today || this.addDays(asDate, 14) < today) {
+      return false;
+    }
+    return true;
+  }
+
+  addDays(date, days) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + days);
+    return newDate;
   }
 }
 

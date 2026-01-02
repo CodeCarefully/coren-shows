@@ -7,7 +7,7 @@ Made in : [<img src="https://img.shields.io/badge/React-20232A?style=for-the-bad
 
 
 
-## Coren's shows
+## CorenTV
 
 This is a small website project to allow Coren to list his TV show recommendations in a useful way.
 

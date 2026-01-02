@@ -48,9 +48,11 @@ export default class TVShow extends React.Component {
               <div className='description'>
                 {this.props.show.description}
               </div>
-              <div className='status'>
-                <span className='bold'>Status: </span>{this.props.show.status}
-              </div>
+              {this.props.show.status &&
+                <div className='status'>
+                  <span className='bold'>Status: </span>{this.props.show.status}
+                </div>
+              }
               <div className='streaming'>
                 <WatchSection sources={this.props.show.streamingUrls} />
               </div>
