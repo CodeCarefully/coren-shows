@@ -237,6 +237,9 @@ class DatabaseService {
     if (url.includes('nbc.com')) {
       return 'NBC';
     }
+    if (url.includes('dropout.tv')) {
+      return 'Dropout';
+    }
     if (url.startsWith('http')) {
       return 'Other';
     }
@@ -253,7 +256,7 @@ class DatabaseService {
     }
     var asDate = new Date(parsedDate);
     var today = new Date();
-    if (asDate > today || this.addDays(asDate, 14) < today) {
+    if (asDate > today || this.addDays(asDate, 30) < today) {
       return false;
     }
     return true;
